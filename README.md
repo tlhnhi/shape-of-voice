@@ -19,15 +19,15 @@ pip install Flask
 - Export biến môi trường `FLASK_APP` (1 trong 3 cách)
   - Với Bash
   ```
-  export FLASK_APP=demo_app.py
+  export FLASK_APP=app.py
   ```
   - Với CMD
   ```
-  set FLASK_APP=demo_app.py
+  set FLASK_APP=app.py
   ```
   - Với Powershell
   ```
-  $env:FLASK_APP = "demo_app.py"
+  $env:FLASK_APP = "app.py"
   ```
 - Chạy server
 
