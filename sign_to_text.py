@@ -61,18 +61,28 @@ class Sign2Text:
         pred_proba = np.max(self.knn.predict_proba(feature))
         return pred_class, pred_proba*100
         
-
+    def predict(self, img):
+        pred_class, prob = model.predict_knn(img)
+        print('KNN predicts: {} with {:.2f}%'.format(pred_class, prob))
+        if prob >= 90.0:
+            return pred_class, prob
+        pred_class, prob = model.predict_cnn(img)
+        print('CNN predicts: {} with {:.2f}%'.format(pred_class, prob))
+        if prob >= 70.0:
+            return pred_class, prob
+        return None, None
 
 if __name__ == '__main__':
     capture = cv2.VideoCapture(0)
     capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 680)
 
-    model = Sign2Text('InceptionV3_5epochs.h5', './Data/')
+    model = Sign2Text('InceptionResNetV2_10epochs.h5', './Data/')
     data_dir = './Data/i love you'
     indx = len(os.listdir(data_dir))
     while cv2.waitKey(1) != ord('q') :
         ret, frame = capture.read()
+        frame = cv2.flip(frame, 1)
         start_point = (200, 200)
         width = 500
         height = 500
@@ -84,10 +94,11 @@ if __name__ == '__main__':
         if cv2.waitKey(1) == ord('c'):
             img = frame[start_point[1]:start_point[1] + height, start_point[0]:start_point[0] + width, :]
             # img = cv2.flip(img, 1)
-            pred_class, prob = model.predict_cnn(img)
-            print('Predict: {} with {:.2f}%'.format(pred_class, prob))
-            pred_class, prob = model.predict_knn(img)
-            print('Predict: {} with {:.2f}%'.format(pred_class, prob))
+            pred_class, prob = model.predict(img)
+            if pred_class == None:
+                print('Try again')
+            else:
+                print('{} with {:.2f}%'.format(pred_class, prob))
             
         if cv2.waitKey(1) == ord('s'):
             img = frame[start_point[1]:start_point[1] + height, start_point[0]:start_point[0] + width, :]
