@@ -4,6 +4,7 @@ from flask import Flask, render_template, Response, stream_with_context, request
 import cv2
 from sign_to_text import Sign2Text
 from time import sleep
+import requests
 
 app = Flask(__name__)
 # camera = cv2.VideoCapture(0)
@@ -15,6 +16,7 @@ height = 300
 end_point = (start_point[0] + width, start_point[1] + height)
 color = (255, 0, 0)
 thickness = 2
+text_display = ''
 
 def gen_frames(camera):
     global frame
@@ -32,18 +34,11 @@ def gen_frames(camera):
 
 def sign2text():
     global frame
-    prev = None
-    while True:
-        sleep(0.2)
-        if frame is None:
-            continue
-        img = frame[start_point[1]:start_point[1] + height, start_point[0]:start_point[0] + width, :]
-        pred_class, prob = Sign2Text_model.predict(img)
-        if pred_class != None:
-            if not prev or prev != pred_class:
-                prev = pred_class
-                yield pred_class
-    
+    if frame is None:
+        continue
+    img = frame[start_point[1]:start_point[1] + height, start_point[0]:start_point[0] + width, :]
+    pred_class, prob = Sign2Text_model.predict(img)
+    return pred_class
 
 @app.route('/', methods=['GET'])
 def index():
@@ -55,7 +50,9 @@ def video_feed():
 
 @app.route('/text_feed')
 def text_feed():
-    return Response(stream_with_context(sign2text()))
+    pred_word = sign2text()
+    text_display += pred_word
+    return text_display
 
 @app.route('/test_mic')
 def test():
@@ -68,5 +65,21 @@ def speech2text():
     file.save(filename)
     return "done"
 
+@app.route('/text2speech', methods=['GET'])
+def text2speech():
+    url = 'https://api.fpt.ai/hmi/tts/v5'
+    input_text = text_display
+    #input_text = 'xin chào mọi người ở shecodes hackathon'
+    voice_option = ['leminh', 'banmai', 'thuminh', 'giahuy', 'ngoclam', 'myan', 'lannhi', 'linhsan', 'minhquang']
+    voice_id = 7 # could be change
+
+    headers = {
+        'api-key': '1AGd8nuJW3sz3qbfyAwqii1XHPrBZAlA',
+        'speed': '',
+        'voice': voice_option[voice_id]
+    }
+    response = requests.request('POST', url, data=input_text.encode('utf-8'), headers=headers)
+    return response.json()['async']
+    
 if __name__ == '__main__':
     app.run(host='localhost', debug=True)

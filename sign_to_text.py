@@ -21,6 +21,11 @@ class Sign2Text:
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
             'u', 'v', 'w', 'x', 'y', 'z']
+        self.en_vn_dict = {
+            'Good job': 'Amazing good job em!',
+            'i love you': 'Tôi yêu các bạn',
+            'ok': 'Đồng ý'
+        }
         self.knn = joblib.load(knn_model_path)
         self.feature_extractor = VGG16(weights='imagenet', include_top=False)
         print('Model is loaded sucessfully')
@@ -62,10 +67,10 @@ class Sign2Text:
         pred_class = self.knn.predict(feature)[0]
         pred_proba = np.max(self.knn.predict_proba(feature))
         return pred_class, pred_proba*100
-        
+
     def predict(self, img):
         pred_class, prob = self.predict_knn(img)
-        print('KNN predicts: {} with {:.2f}%'.format(pred_class, prob))
+        print('KNN predicts: {} with {:.2f}%'.format(self.en_vn_dict[pred_class], prob))
         if prob >= 90.0:
             return pred_class, prob
         pred_class, prob = self.predict_cnn(img)
