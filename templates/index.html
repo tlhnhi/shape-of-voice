@@ -1,8 +1,55 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Video Streaming Demonstration</h1>
-<img src="{{ url_for('video_feed') }}">
-<iframe src="{{ url_for('text_feed') }}"></iframe>
+<header>
+    <div class="flex-container">
+        <div class="member">
+            <img src="../static/members_pics/cameraOn1.jpg" alt="">
+            <div class="title">
+                <img src="../static/icons/muted.png" alt="">
+                Annabelle
+            </div>
+        </div>
+        <div class="member">
+            <img src="../static/members_pics/cameraOn2.jpg" alt="">
+            <div class="title">
+                <img src="../static/icons/muted.png" alt="">
+                Annabelle
+            </div>
+        </div>
+        <div class="member">
+            <img src="../static/members_pics/ava1.jpg" alt="">
+            <div class="title">
+                <img src="../static/icons/muted.png" alt="">
+                Annabelle
+            </div>
+        </div>
+        <div class="member">
+            <img src="../static/members_pics/cameraOn3.jpg" alt="">
+            <div class="title">
+                <img src="../static/icons/muted.png" alt="">
+                Annabelle
+            </div>
+        </div>
+        <div class="member">
+            <img src="../static/members_pics/cameraOn4.jpg" alt="">
+            <div class="title">
+                <img src="../static/icons/muted.png" alt="">
+                Annabelle
+            </div>
+        </div>
+    </div>
+</header>
+<main class="flext-container">
+    <img src="{{ url_for('video_feed') }}">
+</main>
+<aside><iframe src="{{ url_for('text_feed') }}"></iframe></aside>
+<footer class="flex-container" id="taskbar">
+    <div id="mice" class="mice-off"></div>
+    <div id="camera" class="camera-off"></div>
+    <div id="share" class="share-off"></div>
+    <div id="chat" class="chat"></div>
+    <button>Thoát</button>
+</footer>
 
 {% endblock %}

@@ -8,8 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" 
-        crossorigin="anonymous">
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
     <link rel="stylesheet" href="../static/style/style.css">
 
@@ -58,9 +57,9 @@
             </div>
         </header>
         <main class="flext-container">
-            <img src="../static/members_pics/video_fake.jpg">
+            <img src="{{ url_for('video_feed') }}">
         </main>
-        <aside>aside</aside>
+        <aside><iframe src="{{ url_for('text_feed') }}"></iframe></aside>
         <footer class="flex-container" id="taskbar">
             <div id="mice" class="mice-off"></div>
             <div id="camera" class="camera-off"></div>

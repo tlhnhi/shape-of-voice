@@ -1,13 +1,13 @@
 import keyboard #pip install keyboard
 from camera import VideoCamera
-from flask import Flask, render_template, Response, stream_with_context
+from flask import Flask, render_template, Response, stream_with_context, request
 import cv2
 from sign_to_text import Sign2Text
 from time import sleep
 
 app = Flask(__name__)
 # camera = cv2.VideoCapture(0)
-Sign2Text_model = Sign2Text(cnn_model_path='../InceptionV3_5epochs.h5', knn_model_path='knn_model.sav')
+Sign2Text_model = Sign2Text(cnn_model_path='./InceptionV3_5epochs.h5', knn_model_path='./knn_model.sav')
 frame = None
 start_point = (50, 50)
 width = 300
@@ -47,7 +47,7 @@ def sign2text():
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('layout.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -56,6 +56,17 @@ def video_feed():
 @app.route('/text_feed')
 def text_feed():
     return Response(stream_with_context(sign2text()))
+
+@app.route('/test_mic')
+def test():
+    return render_template('test_mic.html')
+
+@app.route('/speech2text', methods=['POST'])
+def speech2text():
+    file = request.files['file']
+    filename = 'upload/uploaded_record.wav'
+    file.save(filename)
+    return "done"
 
 if __name__ == '__main__':
     app.run(host='localhost', debug=True)
