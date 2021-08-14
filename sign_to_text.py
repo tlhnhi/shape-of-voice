@@ -9,20 +9,22 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from sklearn.neighbors import KNeighborsClassifier
 import glob
 import os
+import joblib
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 class Sign2Text:
-    def __init__(self, cnn_model_path, unsupervised_data_dir=None):
+    def __init__(self, cnn_model_path, knn_model_path, unsupervised_data_dir=None):
         print('Loading model: ', cnn_model_path)
         self.cnn_model = load_model(cnn_model_path)
         self.classes_supervised = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
             'u', 'v', 'w', 'x', 'y', 'z']
+        self.knn = joblib.load(knn_model_path)
+        self.feature_extractor = VGG16(weights='imagenet', include_top=False)
         print('Model is loaded sucessfully')
         if unsupervised_data_dir != None:
-            self.feature_extractor = VGG16(weights='imagenet', include_top=False)
             X_train, y_train = self.load_unsupervised_data(unsupervised_data_dir)
             X_train = self.feature_extractor.predict(X_train, batch_size=4)
             X_train = X_train.reshape(len(X_train), -1)
@@ -62,11 +64,11 @@ class Sign2Text:
         return pred_class, pred_proba*100
         
     def predict(self, img):
-        pred_class, prob = model.predict_knn(img)
+        pred_class, prob = self.predict_knn(img)
         print('KNN predicts: {} with {:.2f}%'.format(pred_class, prob))
         if prob >= 90.0:
             return pred_class, prob
-        pred_class, prob = model.predict_cnn(img)
+        pred_class, prob = self.predict_cnn(img)
         print('CNN predicts: {} with {:.2f}%'.format(pred_class, prob))
         if prob >= 70.0:
             return pred_class, prob

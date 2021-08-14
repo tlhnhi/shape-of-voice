@@ -1,3 +1,4 @@
+import keyboard #pip install keyboard
 from camera import VideoCamera
 from flask import Flask, render_template, Response, stream_with_context
 import cv2
@@ -5,14 +6,22 @@ from sign_to_text import Sign2Text
 from time import sleep
 
 app = Flask(__name__)
-camera = cv2.VideoCapture(0)
-Sign2Text_model = Sign2Text('InceptionV3_5epochs.h5', None)
+# camera = cv2.VideoCapture(0)
+Sign2Text_model = Sign2Text(cnn_model_path='../InceptionV3_5epochs.h5', knn_model_path='knn_model.sav')
 frame = None
+start_point = (50, 50)
+width = 300
+height = 300
+end_point = (start_point[0] + width, start_point[1] + height)
+color = (255, 0, 0)
+thickness = 2
 
 def gen_frames(camera):
     global frame
     while True:
         success, frame = camera.read()  # read the camera frame
+        frame = cv2.flip(frame, 1)
+        frame = cv2.rectangle(frame, start_point, end_point, color, thickness)
         if not success:
             break
         else:
@@ -28,16 +37,9 @@ def sign2text():
         sleep(0.2)
         if frame is None:
             continue
-        start_point = (200, 200)
-        width = 500
-        height = 500
-        end_point = (start_point[0] + width, start_point[1] + height)
-        color = (255, 0, 0)
-        thickness = 2
-        frame = cv2.rectangle(frame, start_point, end_point, color, thickness)
         img = frame[start_point[1]:start_point[1] + height, start_point[0]:start_point[0] + width, :]
-        pred_class, prob = Sign2Text_model.predict_cnn(img)
-        if prob > 0.9:
+        pred_class, prob = Sign2Text_model.predict(img)
+        if pred_class != None:
             if not prev or prev != pred_class:
                 prev = pred_class
                 yield pred_class
