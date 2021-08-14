@@ -1,0 +1,4 @@
+flask
+tensorflow
+opencv-python
+glob2

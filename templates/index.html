@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
 
-Trang chủ
+<h1>Video Streaming Demonstration</h1>
+<img src="{{ url_for('video_feed') }}">
+<iframe src="{{ url_for('text_feed') }}"></iframe>
 
 {% endblock %}
