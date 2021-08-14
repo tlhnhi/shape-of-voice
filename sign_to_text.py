@@ -72,7 +72,7 @@ class Sign2Text:
         pred_class, prob = self.predict_knn(img)
         print('KNN predicts: {} with {:.2f}%'.format(self.en_vn_dict[pred_class], prob))
         if prob >= 90.0:
-            return pred_class, prob
+            return self.en_vn_dict[pred_class], prob
         pred_class, prob = self.predict_cnn(img)
         print('CNN predicts: {} with {:.2f}%'.format(pred_class, prob))
         if prob >= 70.0:

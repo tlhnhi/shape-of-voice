@@ -37,7 +37,7 @@ def gen_frames(camera):
 def sign2text():
     global frame
     if frame is None:
-        continue
+        return None
     img = frame[start_point[1]:start_point[1] + height, start_point[0]:start_point[0] + width, :]
     pred_class, prob = Sign2Text_model.predict(img)
     return pred_class
@@ -52,6 +52,7 @@ def video_feed():
 
 @app.route('/text_feed')
 def text_feed():
+    global text_display
     pred_word = sign2text()
     text_display += pred_word
     return text_display
@@ -79,8 +80,10 @@ def speech2text():
 
 @app.route('/text2speech', methods=['GET'])
 def text2speech():
+    global text_display
     url = 'https://api.fpt.ai/hmi/tts/v5'
     input_text = text_display
+    text_display = ""
     #input_text = 'xin chào mọi người ở shecodes hackathon'
     voice_option = ['leminh', 'banmai', 'thuminh', 'giahuy', 'ngoclam', 'myan', 'lannhi', 'linhsan', 'minhquang']
     voice_id = 7 # could be change

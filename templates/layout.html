@@ -61,7 +61,17 @@
         </main>
 
         <aside>
-            <iframe src="{{ url_for('text_feed') }}"></iframe>
+            <!-- <iframe src="{{ url_for('text_feed') }}"></iframe> -->
+            <div class="card">
+                <div class="card-header">
+                    Sign to text
+                </div>
+                <div id="sign2text" class="card-body"></div>
+                <button class="btn" type="button" onclick="captureSign()">Capture Sign</button>
+                <button class="btn btn-primary" type="button" onclick="Speak()">Speak</button>
+                <div id="text2speech"></div>
+            </div>
+
             <div id="record" class="tab-pane">
                 <form id='recognize-record' enctype="multipart/form-data">
                     <div class="btn-group btn-group-justified" role="group">
@@ -79,109 +89,6 @@
                     <div id="record-sound-section"></div>
                     <div id="record-result"></div>
                 </form>
-
-                <script>
-                    navigator.getUserMedia = (navigator.getUserMedia ||
-                        navigator.webkitGetUserMedia ||
-                        navigator.mozGetUserMedia ||
-                        navigator.msGetUserMedia);
-
-                    var recordData;
-                    var record = document.getElementById('record-btn');
-                    var stop = document.getElementById('stop-btn');
-                    var audioSection = document.getElementById('record-sound-section');
-
-                    var audioCtx = new (window.AudioContext || webkitAudioContext)();
-
-                    if (navigator.getUserMedia) {
-                        console.log('getUserMedia supported.');
-                        navigator.getUserMedia(
-                            // constraints - only audio needed for this app
-                            {
-                                audio: true
-                            },
-
-                            // Success callback
-                            function (stream) {
-                                var recordedChunks = [];
-                                var mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-
-                                record.onclick = function () {
-                                    mediaRecorder.start();
-                                    console.log(mediaRecorder.state);
-                                    console.log("recorder started");
-                                    audioSection.innerHTML = 'Recording...';
-                                }
-
-                                stop.onclick = function () {
-                                    mediaRecorder.stop();
-                                    console.log(mediaRecorder.state);
-                                    console.log("recorder stopped");
-                                }
-
-                                mediaRecorder.addEventListener('dataavailable', function (e) {
-                                    if (e.data.size > 0) recordedChunks.push(e.data);
-                                });
-
-                                mediaRecorder.onstop = function (e) {
-                                    recordData = new Blob(recordedChunks, { type: 'audio/wav; codecs=MS_PCM' });
-                                    recordedChunks = [];
-
-                                    var audioURL = window.URL.createObjectURL(recordData);
-                                    console.log(audioURL);
-
-                                    audioSection.innerHTML = `
-                                    <div class="input-group" id="record-sound-group">
-                                        <audio id="record-sound" name="record-sound" control></audio>
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit">Submit</button>
-                                        </span>
-                                    </div>
-                                    `;
-
-                                    var sound = document.getElementById("record-sound")
-                                    sound.src = audioURL;
-                                    sound.controls = true;
-                                }
-                            },
-
-                            // Error callback
-                            function (err) {
-                                console.log('The following gUM error occured: ' + err);
-                            }
-                        );
-                    } else {
-                        console.log('getUserMedia not supported on your browser!');
-                    }
-
-                    document.getElementById("recognize-record").onsubmit = function (event) {
-                        event.preventDefault();
-
-                        var formdata = new FormData();
-                        formdata.append('file', recordData);
-
-                        $.ajax({
-                            url: "/speech2text",
-                            type: "post",
-                            dataType: "html",
-                            data: formdata,
-                            encode: true,
-                            processData: false,
-                            cache: false,
-                            contentType: false,
-
-                            success: function (data) {
-                                console.log(data);
-                                document.getElementById("record-result").innerHTML = data;
-                            },
-                            error: function (error) {
-                                console.log(error);
-                                getError(type);
-                            }
-                        })
-                    };
-
-                </script>
             </div>
         </aside>
 
@@ -201,6 +108,156 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
+
+    <script>
+        navigator.getUserMedia = (navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia);
+
+        var recordData;
+        var record = document.getElementById('record-btn');
+        var stop = document.getElementById('stop-btn');
+        var audioSection = document.getElementById('record-sound-section');
+
+        var audioCtx = new (window.AudioContext || webkitAudioContext)();
+
+        if (navigator.getUserMedia) {
+            console.log('getUserMedia supported.');
+            navigator.getUserMedia(
+                // constraints - only audio needed for this app
+                {
+                    audio: true
+                },
+
+                // Success callback
+                function (stream) {
+                    var recordedChunks = [];
+                    var mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+
+                    record.onclick = function () {
+                        mediaRecorder.start();
+                        console.log(mediaRecorder.state);
+                        console.log("recorder started");
+                        audioSection.innerHTML = 'Recording...';
+                    }
+
+                    stop.onclick = function () {
+                        mediaRecorder.stop();
+                        console.log(mediaRecorder.state);
+                        console.log("recorder stopped");
+                    }
+
+                    mediaRecorder.addEventListener('dataavailable', function (e) {
+                        if (e.data.size > 0) recordedChunks.push(e.data);
+                    });
+
+                    mediaRecorder.onstop = function (e) {
+                        recordData = new Blob(recordedChunks, { type: 'audio/wav; codecs=MS_PCM' });
+                        recordedChunks = [];
+
+                        var audioURL = window.URL.createObjectURL(recordData);
+                        console.log(audioURL);
+
+                        audioSection.innerHTML = `
+                            <div class="input-group" id="record-sound-group">
+                                <audio id="record-sound" name="record-sound" control></audio>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Submit</button>
+                                </span>
+                            </div>
+                            `;
+
+                        var sound = document.getElementById("record-sound")
+                        sound.src = audioURL;
+                        sound.controls = true;
+                    }
+                },
+
+                // Error callback
+                function (err) {
+                    console.log('The following gUM error occured: ' + err);
+                }
+            );
+        } else {
+            console.log('getUserMedia not supported on your browser!');
+        }
+
+        document.getElementById("recognize-record").onsubmit = function (event) {
+            event.preventDefault();
+
+            var formdata = new FormData();
+            formdata.append('file', recordData);
+
+            $.ajax({
+                url: "/speech2text",
+                type: "post",
+                dataType: "html",
+                data: formdata,
+                encode: true,
+                processData: false,
+                cache: false,
+                contentType: false,
+
+                success: function (data) {
+                    console.log(data);
+                    document.getElementById("record-result").innerHTML = data;
+                },
+                error: function (error) {
+                    console.log(error);
+                    getError(type);
+                }
+            })
+        };
+
+        function captureSign() {
+            $.ajax({
+                url: "/text_feed",
+                type: "get",
+                encode: true,
+                processData: false,
+                cache: false,
+                contentType: false,
+
+                success: function (data) {
+                    document.getElementById("sign2text").innerHTML = data;
+                },
+                error: function (error) {
+                    console.log(error);
+                    getError(type);
+                }
+            })
+        }
+
+        function Speak() {
+            $.ajax({
+                url: "/text2speech",
+                type: "get",
+                encode: true,
+                processData: false,
+                cache: false,
+                contentType: false,
+
+                success: function (data) {
+                    let res = document.getElementById("text2speech");
+
+                    res.innerHTML = `
+                    <div class="input-group" id="record-sound-group">
+                        <audio id="speech" name="speech" src=${data} controls></audio>
+                    </div>
+                    `;
+
+                    var sound = document.getElementById("speech")
+                    // sound.src = data;
+                    sound.controls = true;
+                },
+                error: function (error) {
+                    console.log(error);
+                    getError(type);
+                }
+            })
+        }
+    </script>
 
 </body>
 
