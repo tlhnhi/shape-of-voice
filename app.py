@@ -5,6 +5,8 @@ import cv2
 from sign_to_text import Sign2Text
 from time import sleep
 import requests
+import ffmpeg
+import speech_recognition as sr
 
 app = Flask(__name__)
 # camera = cv2.VideoCapture(0)
@@ -61,9 +63,19 @@ def test():
 @app.route('/speech2text', methods=['POST'])
 def speech2text():
     file = request.files['file']
-    filename = 'upload/uploaded_record.wav'
-    file.save(filename)
-    return "done"
+    inp_file = 'upload/uploaded_record.wav'
+    file.save(inp_file)
+
+    out_file = "./upload/uploaded_record_conv.wav"
+    ffmpeg.input(inp_file).output(out_file, ar=16000, ac=1, ab=256000).overwrite_output().run()
+    r = sr.Recognizer()
+    with sr.AudioFile(out_file) as source:
+        audio = r.listen(source)
+        try:
+            text = r.recognize_google(audio,language="vi-VI")
+            return text
+        except:
+            return "Xin lỗi! tôi không nhận được voice!"
 
 @app.route('/text2speech', methods=['GET'])
 def text2speech():

@@ -32,6 +32,7 @@
                 </div>
             </div>
             <div id="record-sound-section"></div>
+            <div id="record-result"></div>
         </form>
 
         <script>
@@ -78,7 +79,8 @@
                         });
 
                         mediaRecorder.onstop = function (e) {
-                            recordData = new Blob(recordedChunks);
+                            recordData = new Blob(recordedChunks, { type: 'audio/wav; codecs=MS_PCM' });
+                            recordedChunks = [];
 
                             var audioURL = window.URL.createObjectURL(recordData);
                             console.log(audioURL);
@@ -124,7 +126,8 @@
                     contentType: false,
 
                     success: function (data) {
-                        console.log('Uploaded!');
+                        console.log(data);
+                        document.getElementById("record-result").innerHTML = data;
                     },
                     error: function (error) {
                         console.log(error);
