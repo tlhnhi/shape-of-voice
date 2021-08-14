@@ -1,3 +1,4 @@
-tensorflow==2.4.0
+flask
+tensorflow
 opencv-python
 glob2
