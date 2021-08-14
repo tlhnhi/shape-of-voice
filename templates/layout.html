@@ -57,19 +57,21 @@
                 </div>
             </div>
         </header>
-        <main>
+        <main class="flext-container">
             <img src="../static/members_pics/video_fake.jpg">
         </main>
         <aside>aside</aside>
         <footer class="flex-container" id="taskbar">
-            <img src="../static/icons/mice_button.svg">
-            <img src="../static/icons/camera_button.svg">
-            <img src="../static/icons/share_button.svg">
-            <img src="../static/icons/chat_button.svg">
+            <div id="mice" class="mice-off"></div>
+            <div id="camera" class="camera-off"></div>
+            <div id="share" class="share-off"></div>
+            <div id="chat" class="chat"></div>
             <button>Thoát</button>
         </footer>
     </div>
     <!-- Optional JavaScript -->
+    <script src="../static/JavaScripts/taskbarControllers.js"></script>
+
     <!-- jQuery first, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
