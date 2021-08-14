@@ -6,6 +6,14 @@ Shecodes Hackathon 2021
 
 - Clone repo này về máy và di chuyển vào thư mục repo
 
+- Cài `ffmpeg` tại môi trường sử dụng
+
+VD: Đối với anaconda
+
+```
+conda install ffmpeg -y
+```
+
 - Cài đặt các thư viện
 
 ```
