@@ -10,7 +10,7 @@ import speech_recognition as sr
 
 app = Flask(__name__)
 # camera = cv2.VideoCapture(0)
-Sign2Text_model = Sign2Text(cnn_model_path='./InceptionV3_5epochs.h5', knn_model_path='./knn_model.sav')
+Sign2Text_model = Sign2Text(cnn_model_path='./Model/InceptionV3_30epochs.h5', knn_model_path='./knn_model.sav')
 frame = None
 start_point = (50, 50)
 width = 300
