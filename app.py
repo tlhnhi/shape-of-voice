@@ -84,9 +84,9 @@ def text2speech():
     url = 'https://api.fpt.ai/hmi/tts/v5'
     input_text = text_display
     text_display = ""
-    #input_text = 'xin chào mọi người ở shecodes hackathon'
-    voice_option = ['leminh', 'banmai', 'thuminh', 'giahuy', 'ngoclam', 'myan', 'lannhi', 'linhsan', 'minhquang']
-    voice_id = 7 # could be change
+    # input_text = 'xin chào mọi người ở shecodes hackathon'
+    voice_option = ['leminh', 'thuminh']
+    voice_id = int(request.args.get('voice'))
 
     headers = {
         'api-key': '1AGd8nuJW3sz3qbfyAwqii1XHPrBZAlA',
