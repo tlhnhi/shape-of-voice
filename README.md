@@ -39,7 +39,7 @@ Dự án này sẽ xây dựng một nền tảng họp trực tuyến mới, ch
 
 - Lập trình và phát triển web 
 - Học được mindset từ việc lên ý tưởng, thử nghiệm và phát triển 1 phần mềm AI
-- K
+- Kĩ năng làm việc nhóm và quản lí thời gian 
 
 ## Cách sử dụng
 
