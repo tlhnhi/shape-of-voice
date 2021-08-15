@@ -16,6 +16,7 @@ Dự án này sẽ xây dựng một nền tảng họp trực tuyến mới, ch
 
 - Chuyển đổi ngôn ngữ kí hiệu sang giọng nói 
 - Chuyển đổi giọng nói sang văn bản
+- Các model nhận dạng với độ chính xác > 90%
 
 ## Công nghệ sử dụng
 
@@ -27,6 +28,18 @@ Dự án này sẽ xây dựng một nền tảng họp trực tuyến mới, ch
 
 - Thu thập thêm dữ liệu về ngôn ngữ kí hiệu tiếng việt 
 - Phát triển sản phẩm có thể đáp ứng nhu cầu thời gian thực
+
+## Khó khăn khi gặp phải 
+
+- Các thành viên là newbie trong lập trình web 
+- Mất nhiều thời gian trong việc thu thập dữ liệu và tìm kiếm thử nghiệm các model 
+- Hackathon online tạo ra nhiều rào cản về giao tiếp và làm việc nhóm
+
+## Các kỹ năng học được 
+
+- Lập trình và phát triển web 
+- Học được mindset từ việc lên ý tưởng, thử nghiệm và phát triển 1 phần mềm AI
+- K
 
 ## Cách sử dụng
 
