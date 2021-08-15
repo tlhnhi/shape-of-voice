@@ -2,3 +2,7 @@ flask
 tensorflow
 opencv-python
 glob2
+SpeechRecognition
+scikit-learn
+keyboard
+ffmpeg-python
