@@ -24,27 +24,42 @@ header {
 .flex-container .member {
 	margin: 0px 3px;
 	position: relative;
+	width: 11em;
+	background-color: #242424;
 }
 
-.flex-container .title {
+.flex-container .member img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	align-self: center;
+	height: 6em;
+}
+
+.flex-container .member .title {
 	position: absolute;
     background-color: #0A0A0A;
     color: whitesmoke;
     padding: .1em .5em;
     bottom: 0px;
     left: 0px;
+	
 }
 
-.flex-container .title img {
+.flex-container .member .title img {
+	float: left;
+	margin-left: 0px;
 	height: 1.5em;
-}
-
-.flex-container img {
-	height: 6em;
 }
 
 aside {
 	grid-area: sidebar;
+}
+
+aside select {
+	display: block;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 
 main {
@@ -100,20 +115,20 @@ footer {
 	background: url(../icons/mice_button_on.svg) no-repeat;
 }
 
-.camera-on {
-	background: url(../icons/camera_button_on.svg) no-repeat;
-}
-
 .camera-off {
 	background: url(../icons/camera_button_off.svg) no-repeat;
 }
 
-.share-on {
-	background: url(../icons/share_button_on.svg) no-repeat;
+.camera-on {
+	background: url(../icons/camera_button_on.svg) no-repeat;
 }
 
 .share-off {
 	background: url(../icons/share_button_off.svg) no-repeat;
+}
+
+.share-on {
+	background: url(../icons/share_button_on.svg) no-repeat;
 }
 
 .chat {
